@@ -44,22 +44,36 @@ def objective(x: list[float]) -> float:
     """
     return -(x[0]*capacities[0]+x[1]*capacities[1]+x[2]*capacities[2])  # minimum of negative = maximum
 
-# ineq: maximum amount of trucks
-
-
 def constraint1(x: list[float]) -> float:
+    """ineq: maximum amount of trucks
+
+    Args:
+        x (list[float]): vector of decision variables
+
+    Returns:
+        float: number that is >=0 if constraint is obeyed
+    """
     return -(x[0]+x[1]+x[2]-maximum_trucks)
 
-# ineq: maximum amount of drivers
-
-
 def constraint2(x: list[float]) -> float:
+    """ineq: maximum amount of drivers
+    Args:
+        x (list[float]): vector of decision variables
+
+    Returns:
+        float: number that is >=0 if constraint is obeyed
+    """
     return -(x[0]*drivers[0]+x[1]*drivers[1]+x[2]*drivers[2]-maximum_drivers)
 
-# ineq: maximum budget
-
-
 def constraint3(x: list[float]) -> float:
+    """ineq: maximum budget
+
+    Args:
+        x (list[float]): vector of decision variables
+
+    Returns:
+        float: number that is >=0 if constraint is obeyed
+    """
     return -(x[0]*prices[0]+x[1]*prices[1]+x[2]*prices[2]-maximum_budget)
 
 
