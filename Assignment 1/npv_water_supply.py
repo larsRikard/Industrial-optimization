@@ -1,7 +1,7 @@
 import numpy as np
 import numpy_financial as npf
 import scipy.optimize as spo
-# Problem 3.13
+# Problem 3.12
 
 #Common:
 interest_rate = 0.12
@@ -41,7 +41,6 @@ for i in range(1,lifetime_B):
         money_flow_B[i] += flume_B_salvage_value
     #every 10th year we salvage and buy new flume
     elif(i%10 == 0):
-        print(i)
         money_flow_B[i] += flume_B_salvage_value
         money_flow_B[i] += -flume_B
 

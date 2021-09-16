@@ -18,7 +18,7 @@ def objective(x: list[float]) -> float:
         float: area
     """
     y = (2*x[0]**2)+3*x+1
-    # pythagoras
+    # pythagoras, but really no need to find the square root
     distance_from_origin = (x[0]**2)+(y**2)
     return distance_from_origin
 

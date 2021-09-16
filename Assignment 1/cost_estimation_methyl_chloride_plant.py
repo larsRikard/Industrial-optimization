@@ -60,6 +60,8 @@ for i in range(1, len(ci_money_flow)):
     if(i%4 == 0):
         ci_money_flow[i] += ci_salvage_value
         ci_money_flow[i] -= ci_installed_cost
+#salvaging the chlorinator in year 10 even though it has more life
+ci_money_flow[-1] += ci_salvage_value 
 
 ci_npv_10_percent = npf.npv(interest_rates[0], ci_money_flow)
 ci_npv_20_percent = npf.npv(interest_rates[1], ci_money_flow)
