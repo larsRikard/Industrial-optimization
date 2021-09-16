@@ -2,7 +2,6 @@ import numpy as np
 import scipy.optimize as spo
 # problem 1.3
 
-
 # 1 degree of freedom
 # x_length only independant variable
 x_lenght = 3
