@@ -39,6 +39,6 @@ m.Maximize(c[0]*x1+c[1]*x2+c[2]*x3)
 #solution
 m.options.SOLVER=1
 m.solve(disp=True)
-print(f'product 1: {x1 = }')
-print(f'product 2: {x2 = }')
-print(f'product 3: {x3 = }')
+print(f'product 1: {x1[0]}')
+print(f'product 2: {x2[0]}')
+print(f'product 3: {x3[0]}')

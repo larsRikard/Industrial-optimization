@@ -1,5 +1,5 @@
 from gekko import GEKKO
-
+#https://stackoverflow.com/questions/39236863/restrict-scipy-optimize-minimize-to-integer-values
 m = GEKKO(remote=False)
 x = m.Array(m.Var,9,lb=0,ub=7,integer=True)
 
