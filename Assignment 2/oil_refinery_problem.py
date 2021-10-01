@@ -1,6 +1,4 @@
 import numpy as np
-import scipy.optimize as spo
-from scipy.optimize import linprog
 from gekko import GEKKO
 m = GEKKO(remote = False)
 
@@ -17,15 +15,15 @@ A_2 = m.Var(lb=0,ub=1, integer=integer_solutions)
 A_3 = m.Var(lb=0,ub=1, integer=integer_solutions)
 A_4 = m.Var(lb=0,ub=1, integer=integer_solutions)
 
-C_1 = m.Var(lb=0,ub=1, integer=integer_solutions)
-C_2 = m.Var(lb=0,ub=1, integer=integer_solutions)
-C_3 = m.Var(lb=0,ub=1, integer=integer_solutions)
-C_4 = m.Var(lb=0,ub=1, integer=integer_solutions)
-
 B_1 = m.Var(lb=0,ub=1, integer=integer_solutions)
 B_2 = m.Var(lb=0,ub=1, integer=integer_solutions)
 B_3 = m.Var(lb=0,ub=1, integer=integer_solutions)
 B_4 = m.Var(lb=0,ub=1, integer=integer_solutions)
+
+C_1 = m.Var(lb=0,ub=1, integer=integer_solutions)
+C_2 = m.Var(lb=0,ub=1, integer=integer_solutions)
+C_3 = m.Var(lb=0,ub=1, integer=integer_solutions)
+C_4 = m.Var(lb=0,ub=1, integer=integer_solutions)
 
 A = [[A_1, B_1, C_1],[A_2,B_2,C_2],[A_3,B_3,C_3],[A_4,B_4,C_4]]
 
@@ -58,10 +56,11 @@ const_3 = A_3*x_A+B_3*x_B+C_3*x_C
 const_4 = A_4*x_A+B_4*x_B+C_4*x_C
 
 const = [const_1, const_2, const_3, const_4]
+test = []
 
 #Utilization of mix percentage
 for i in range(4):
-    m.Equation(const[i]<=const_max[i])
+    test.append(m.Equation(const[i]<=const_max[i]))
 
 total_cost = 0
 total_sales = 0
@@ -71,24 +70,32 @@ for i in range(4):
 for i in range(3):
     total_sales += x[i]*prod_price[i]
 
-m.Maximize(total_sales-total_cost)
+profit = total_sales-total_cost
+m.Maximize(profit)
 
 m.solve(disp=True)
 
-print(f'{ x = }')
-print(f'{ const[0] = }')
-print(f'{ const[1] = }')
-print(f'{ const[2] = }')
-print(f'{ const[3] = }')
-print(f'{ m.sol = }')
+#Barrels of each product produced
+print(f'Amount of each product: { x = }')
+
+#Barrels of each constituent needed
+print("total amount of constituents needed:")
+print(f'constituent 1: {A_1[0]*x_A[0]+B_1[0]*x_B[0]+C_1[0]*x_C[0]}')
+print(f'constituent 2: {A_2[0]*x_A[0]+B_2[0]*x_B[0]+C_2[0]*x_C[0]}')
+print(f'constituent 3: {A_3[0]*x_A[0]+B_3[0]*x_B[0]+C_3[0]*x_C[0]}')
+print(f'constituent 4: {A_4[0]*x_A[0]+B_4[0]*x_B[0]+C_4[0]*x_C[0]}')
+
+#Optimal blends
+print(f'product A mix: c1 = {A_1[0]}, c2 = {A_2[0]}, c3 = {A_3[0]}, c4 = {A_4[0]}')
+print(f'product B mix: c1 = {B_1[0]}, c2 = {B_2[0]}, c3 = {B_3[0]}, c4 = {B_4[0]}')
+print(f'product C mix: c1 = {C_1[0]}, c2 = {C_2[0]}, c3 = {C_3[0]}, c4 = {C_4[0]}')
 
 
-""" print(m.path)
 
-import json
-with open(m.path+'//results.json') as f:
-    results = json.load(f) """
-
+#Total profit
+print("total profit:")
+print(f'{ m.options.OBJFCNVAL = }')
+print(f'profit: {profit = }')
 
 
 
