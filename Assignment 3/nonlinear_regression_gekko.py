@@ -39,7 +39,7 @@ print(f'Optimized B3 = {B3[0]}')
 
 plt.figure(1)
 plt.plot(xm,ym,'bo')
-plt.plot(xm,y.value,'r-')
+plt.plot(xm,y.value,'r')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.legend(['Measured','Model'],loc='best')
