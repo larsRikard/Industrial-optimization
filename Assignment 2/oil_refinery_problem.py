@@ -2,14 +2,17 @@ import numpy as np
 from gekko import GEKKO
 m = GEKKO(remote = False)
 
+# Used to tell the library I don't want integer solutions later
 integer_solutions = False
 
+#maximum barrels of constituents 1,2,3,4 
 const_max = [3000,2000,4000,1000]
+#price per barrel of costituent 1,2,3,4 
 const_cost = [3.0,6.0,4.0,5.0]
-
+#price per barrel of gasoline product A,B,C
 prod_price = [5.50,4.50,3.50]
 
-#Mix percentages
+#Mix percentages: A_1 == ratio of constituent 1 in gasoline mix A 
 A_1 = m.Var(lb=0,ub=1, integer=integer_solutions)
 A_2 = m.Var(lb=0,ub=1, integer=integer_solutions)
 A_3 = m.Var(lb=0,ub=1, integer=integer_solutions)
@@ -27,14 +30,14 @@ C_4 = m.Var(lb=0,ub=1, integer=integer_solutions)
 
 A = [[A_1, B_1, C_1],[A_2,B_2,C_2],[A_3,B_3,C_3],[A_4,B_4,C_4]]
 
-#Amount of each product
+#TOTAL amount of each product
 x_A = m.Var(lb=0,ub=None)
 x_B = m.Var(lb=0,ub=None)
 x_C = m.Var(lb=0,ub=None)
 
 x = [x_A,x_B,x_C]
 
-#Sum percentage equality constraints
+#Sum ratio equality constraints
 m.Equation(A_1+A_2+A_3+A_4 == 1)
 m.Equation(B_1+B_2+B_3+B_4 == 1)
 m.Equation(C_1+C_2+C_3+C_4 == 1)
@@ -49,7 +52,7 @@ m.Equation(B_2 >= 0.1)
 
 m.Equation(C_1 <= 0.7)
 
-#Amount of constituents needed
+#TOTAL amount of each constituents needed
 const_1 = A_1*x_A+B_1*x_B+C_1*x_C
 const_2 = A_2*x_A+B_2*x_B+C_2*x_C
 const_3 = A_3*x_A+B_3*x_B+C_3*x_C
@@ -65,11 +68,13 @@ for i in range(4):
 total_cost = 0
 total_sales = 0
 for i in range(4):
+    #for each sum of constituents, multiply their cost and add it to the total
     total_cost += const[i]*const_cost[i]
-
 for i in range(3):
+    #for each TOTAL amount of each product, multiply their price and add it to the total
     total_sales += x[i]*prod_price[i]
 
+#*The objective function is the profit
 profit = total_sales-total_cost
 m.Maximize(profit)
 
@@ -78,6 +83,7 @@ m.solve(disp=True)
 #Barrels of each product produced
 print(f'Amount of each product: { x = }')
 
+#! Note: the gekko library makes all variables into arrays, so they have to be indexed to get their value.
 #Barrels of each constituent needed
 print("total amount of constituents needed:")
 print(f'constituent 1: {A_1[0]*x_A[0]+B_1[0]*x_B[0]+C_1[0]*x_C[0]}')
@@ -92,5 +98,5 @@ print(f'product C mix: c1 = {C_1[0]}, c2 = {C_2[0]}, c3 = {C_3[0]}, c4 = {C_4[0]
 
 #Total profit
 print("total profit:")
-print(f'{ m.options.OBJFCNVAL = }')
-print(f'profit: {profit = }')
+print(f'{ -m.options.OBJFCNVAL = }')
+#print(f'profit: {profit = }')
