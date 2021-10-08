@@ -1,10 +1,8 @@
 import numpy as np
-import scipy.optimize as spo
-from scipy.optimize import linprog
 from gekko import GEKKO
 m = GEKKO(remote = False)
 
-integer_solutions = False
+integer_solutions = True
 A = [[1,1,10],[100,10,10],[10,100,10]] #vitamin mg/ration
 b = [1,50,10] #minimum daily vitamin
 c = [1.0,2.0,0.5] #cost per ration
@@ -28,7 +26,7 @@ m.solve(disp=True)
 
 print(f'{ x = }')
 
-print(f'{(A[0][0]*x[0][0]+A[0][1]*x[1][0]+A[0][2]*x[2][0]) = }')
-print(f'{(A[1][0]*x[0][0]+A[1][1]*x[1][0]+A[1][2]*x[2][0]) = }')
-print(f'{A[2][0]*x[0][0]+A[2][1]*x[1][0]+A[2][2]*x[2][0] = }')
+print(f'Vitamin A: {(A[0][0]*x[0][0]+A[0][1]*x[1][0]+A[0][2]*x[2][0])}')
+print(f'Vitamin B: {(A[1][0]*x[0][0]+A[1][1]*x[1][0]+A[1][2]*x[2][0])}')
+print(f'Vitamin C: {A[2][0]*x[0][0]+A[2][1]*x[1][0]+A[2][2]*x[2][0]}')
 
