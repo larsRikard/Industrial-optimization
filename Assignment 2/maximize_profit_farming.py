@@ -1,6 +1,5 @@
 import numpy as np
-import scipy.optimize as spo
-from scipy.optimize import linprog
+
 from gekko import GEKKO
 m = GEKKO(remote = False)
 #m.options.Linear = 1 #Tells the solver that the problem in linear
@@ -37,13 +36,6 @@ x3 = m.Var(lb=0, ub=farm_C_max_area, integer=False)
 
 x = [x1,x2,x3]
 
-# water usage on each farm
-""" w1 = m.Var(lb=0, ub=farm_A_max_water, integer=False)
-w2 = m.Var(lb=0, ub=farm_B_max_water, integer=False)
-w3 = m.Var(lb=0, ub=farm_C_max_water, integer=False)
-
-w = [w1,w2,w3] """
-
 # percentage of each crop type
 #Mix percentages (farm A,B,C and crop 1,2,3)
 A_1 = m.Var(lb=0,ub=1, integer=False)
@@ -72,25 +64,23 @@ m.Equation(x[1]/area[1] == x[2]/area[2])
 
 # water consumption inequality constraint (max water per farm)
 # sum(percentage_of_crop_n*needed_water_per_hectar_crop_n)*utilized_area_farm_m
-
-
 m.Equation((A[0][0]*water_per_hectare[0]+A[1][0]*water_per_hectare[1]+A[2][0]*water_per_hectare[2])*x[0] <= farm_A_max_water)
 m.Equation((A[0][1]*water_per_hectare[0]+A[1][1]*water_per_hectare[1]+A[2][1]*water_per_hectare[2])*x[1] <= farm_B_max_water)
 m.Equation((A[0][2]*water_per_hectare[0]+A[1][2]*water_per_hectare[1]+A[2][2]*water_per_hectare[2])*x[2] <= farm_C_max_water)
 
-""" m.Equation((A_1*water_per_hectare_1+A_2*water_per_hectare_2+A_3*water_per_hectare_3)*x1 <= farm_A_max_water)
-m.Equation((B_1*water_per_hectare_1+B_2*water_per_hectare_2+B_3*water_per_hectare_3)*x2 <= farm_B_max_water)
-m.Equation((C_1*water_per_hectare_1+C_2*water_per_hectare_2+C_3*water_per_hectare_3)*x3 <= farm_C_max_water) """
 
 
 # Objective
 
 profit = 0
-
+#x[i] is total utilized area on farm i
+#A[j,i]: j points to crop, i references the farm
+#profit_per_hectare[j] is the profit per hectare for crop j
 for i in range(3):
+    #for each farm
     for j in range(3):
-        profit += x[i]*A[i][j]*profit_per_hectare[i]
-
+        #for each crop
+        profit += x[i]*A[j][i]*profit_per_hectare[j]
 m.Maximize(profit)
 
 #solution
@@ -115,6 +105,6 @@ print(f'Water usage farm 3: {(A[0][2][0]*water_per_hectare[0]+A[1][2][0]*water_p
 profit_maxed = 0
 for i in range(3):
     for j in range(3):
-        profit_maxed += x[i][0]*A[i][j][0]*profit_per_hectare[i]
+        profit_maxed += x[i][0]*A[j][i][0]*profit_per_hectare[j]
 
 print(f'{profit_maxed = }')
