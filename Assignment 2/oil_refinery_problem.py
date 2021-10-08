@@ -90,14 +90,7 @@ print(f'product A mix: c1 = {A_1[0]}, c2 = {A_2[0]}, c3 = {A_3[0]}, c4 = {A_4[0]
 print(f'product B mix: c1 = {B_1[0]}, c2 = {B_2[0]}, c3 = {B_3[0]}, c4 = {B_4[0]}')
 print(f'product C mix: c1 = {C_1[0]}, c2 = {C_2[0]}, c3 = {C_3[0]}, c4 = {C_4[0]}')
 
-
-
 #Total profit
 print("total profit:")
 print(f'{ m.options.OBJFCNVAL = }')
 print(f'profit: {profit = }')
-
-
-
-
-
