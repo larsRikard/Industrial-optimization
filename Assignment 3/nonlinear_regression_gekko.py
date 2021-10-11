@@ -37,6 +37,7 @@ print(f'Optimized B1 = {B1[0]}')
 print(f'Optimized B2 = {B2[0]}')
 print(f'Optimized B3 = {B3[0]}')
 
+
 plt.figure(1)
 plt.plot(xm,ym,'bo')
 plt.plot(xm,y.value,'r')
