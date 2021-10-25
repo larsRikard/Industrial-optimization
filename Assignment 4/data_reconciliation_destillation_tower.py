@@ -19,4 +19,3 @@ A = np.matrix([
 ŷ = y-V*(A.T)*np.linalg.inv(A*V*(A.T))*A*y
 
 print(f'{ŷ = }')
-
